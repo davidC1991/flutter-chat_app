@@ -77,7 +77,7 @@ class _FormState extends State<Form> {
               FocusScope.of(context).unfocus();
               final loginOk= await authService.login(emailCtrl.text.trim(), passCtrl.text.trim());
               if(loginOk){
-
+                Navigator.pushReplacementNamed(context, 'usuarios');
               }else{
                 mostrarAlerta(context,'Login incorrecto', 'Revise sus credenciales'); 
               }

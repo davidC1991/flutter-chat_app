@@ -1,8 +1,11 @@
+import 'package:chat_app/helpers/mostrar_alertas.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/widgets/boton_azul.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/widgets/labels.dart';
 import 'package:chat_app/widgets/logo.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class RegisterPage extends StatelessWidget {
@@ -45,6 +48,8 @@ class _FormState extends State<Form> {
   final nameCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authService=Provider.of<AuthService>(context);
+  
     return Container(
       margin: EdgeInsets.only(top:40),
       padding: EdgeInsets.symmetric(horizontal: 40),
@@ -72,9 +77,17 @@ class _FormState extends State<Form> {
          
           BotonAzul(
             texto:'Ingrese',
-            onPressed: (){
+            onPressed: authService.autenticando?null: () async {
               print(emailCtrl.text);
               print(passCtrl.text);
+              final registerOk=await authService.registrar(emailCtrl.text.trim(), passCtrl.text.trim(), nameCtrl.text.trim());
+
+              if(registerOk == true){
+
+                 Navigator.pushReplacementNamed(context, 'usuarios');
+              }else{
+                mostrarAlerta(context,'Fallo al registrar',registerOk);
+              }
             },
             color: Colors.blue
           )

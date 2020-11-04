@@ -1,4 +1,6 @@
+import 'package:chat_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:chat_app/models/usuario.dart';
 
@@ -20,13 +22,18 @@ class _UsuarioPageState extends State<UsuarioPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final usuario= authService.usuario;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mi nombre',style: TextStyle(color: Colors.black),),
+        title: Text(usuario.nombre,style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.exit_to_app,color: Colors.blue,),
-          onPressed: (){}
+          onPressed: (){
+            Navigator.pushReplacementNamed(context, 'login');
+            AuthService.deleteToken();
+          }
         ),
         actions: [
           Container(
