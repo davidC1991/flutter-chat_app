@@ -1,5 +1,6 @@
 import 'package:chat_app/helpers/mostrar_alertas.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socketServides.dart';
 import 'package:chat_app/widgets/boton_azul.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/widgets/labels.dart';
@@ -49,7 +50,7 @@ class _FormState extends State<Form> {
   @override
   Widget build(BuildContext context) {
     final authService=Provider.of<AuthService>(context);
-  
+    final socketService=Provider.of<SocketService>(context);
     return Container(
       margin: EdgeInsets.only(top:40),
       padding: EdgeInsets.symmetric(horizontal: 40),
@@ -83,9 +84,10 @@ class _FormState extends State<Form> {
               final registerOk=await authService.registrar(emailCtrl.text.trim(), passCtrl.text.trim(), nameCtrl.text.trim());
 
               if(registerOk == true){
-
+                 socketService.connect();
                  Navigator.pushReplacementNamed(context, 'usuarios');
               }else{
+                
                 mostrarAlerta(context,'Fallo al registrar',registerOk);
               }
             },

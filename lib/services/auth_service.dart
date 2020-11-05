@@ -39,8 +39,8 @@ class AuthService with ChangeNotifier{
     };
     print('${ Environment.apiUrl }');
     final resp= await http.post(
-      '${ Environment.apiUrl }/login',
-      //'http://192.168.1.27:3000/api/login',
+      //'${ Environment.apiUrl }/login',
+      'http://192.168.1.27:3000/api/login',
       body: jsonEncode(data),
       headers: {
         'Content-Type':'application/json'
@@ -94,10 +94,12 @@ class AuthService with ChangeNotifier{
 
   Future<bool> isLoggedIn() async{
     final token = await this._storage.read(key: 'token');
+    print(token);
+    
     
     final resp= await http.get(
-      '${ Environment.apiUrl }/login/renew',
-      //'http://192.168.1.27:3000/api/login/new',
+      //'${ Environment.apiUrl }/login/renew',
+      'http://192.168.1.27:3000/api/login/renew',
      
       headers: {
         'Content-Type':'application/json',
@@ -114,11 +116,13 @@ class AuthService with ChangeNotifier{
       await this.guardarToken(loginResponse.token);
       return true;
     }else {
-      
-
+      this.logout();
       return false;
     }
+    print('|||||');
   }
+      
+
 
   Future guardarToken(String token)async{
     return await _storage.write(key: 'token', value: token);
